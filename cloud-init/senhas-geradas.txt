@@ -1,0 +1,8 @@
+﻿=== SENHAS GERADAS ===
+Data: 2025-11-05 17:07:53
+
+1. UsuÃ¡rio deploy: QBZAG1rPKCzt4XJe
+2. MySQL root: 4TlBM>?Y$fxF;iJw'dS5
+3. MySQL app_user: YBeuk'FG%;tazjbCs@w-
+
+GUARDE ESTE ARQUIVO EM LOCAL SEGURO!

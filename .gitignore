@@ -1,0 +1,55 @@
+# Dependências
+/vendor/
+composer.lock
+
+# Configurações locais
+/config/db.local.php
+.env
+.env.local
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+/logs/
+/storage/logs/
+
+# Cache
+/cache/
+/storage/cache/
+
+# Testes
+/phpunit.xml
+/phpunit.xml.bak
+/coverage/
+.phpunit.result.cache
+
+# Docker
+.dockerignore
+
+# Build
+/build/
+/dist/
+
+# Arquivos temporários
+*.tmp
+*.bak
+*.cache
+
+# Senhas e secrets
+*.key
+*.pem
+secrets/
+

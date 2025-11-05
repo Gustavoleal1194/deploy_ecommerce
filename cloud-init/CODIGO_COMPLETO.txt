@@ -1,0 +1,186 @@
+#cloud-config
+hostname: aula7-vps
+manage_etc_hosts: true
+fqdn: aula7-vps.local
+
+users:
+  - name: deploy
+    groups: sudo, www-data
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    lock_passwd: false
+    passwd: ""
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDAiucb5+/lHBgbwIPLUzdQZYgee5Lh/46YIUkjHDJzVm3R0z9CTFoLaSHxATSvve0/0GMu+b7E0Jyqd0/u4TUDq1fm2/Z+b9hnwt1kNOBEL9ni6KaPbW3g/qnqKLkRWDU6hBryauXDBVOXJ2Fp4er+Q6/GMejLBoNF3vBkDghh4liw9m/9eGXxal3+5DKU57A3bZH9k56jovYwVemZ3aEU3pScFgfDI3NU1IqC86/sAVDh10Z6V8jykIPc/qy2iyvREqp+f0zGNhobWHObYJTnXeyHU5TDcEh0iQT6oQVmuMgu9DGCNHSqnI7fYJrPJTNiEFaAybNTyTRKklRBzahJkE/dt0vc2Bgp23YgqfdfFk4Wsc6ychT8RFNkn3iZSGkh1WuYiVMtbBVFMXaCyvL1cOvoQ9+I442Y/LXDsJu1ivfZOr7eU/aHQqgvS7zx0+E1FKn7IN6uXwK4ggQ8p5Z5Zyd8qqRhqXSd+OUAG2m/uw9l2j2V3ao08mWn+wrnfCmQeYmePjMZ0Jrq6YRcjjBkevKp4VLlQSoeHqJ5lv7dyh0fYzu42AOJZQRhjC4VbWrg43FLxxPqmIBcmDSnpKfC0dgdVx/jzIn0I+hFRBOPcOsrOu9kcEcDYesRf/hNQALnUrIMNLgYkRVC1vslujbGg2aiEr//h8bbNd96oa0F5Q== aula7-vps-20251105
+
+package_update: true
+package_upgrade: true
+
+packages:
+  - curl
+  - wget
+  - git
+  - unzip
+  - software-properties-common
+  - apt-transport-https
+  - ca-certificates
+  - gnupg
+  - lsb-release
+  - ufw
+  - fail2ban
+
+apt:
+  sources:
+    php:
+      source: "ppa:ondrej/php"
+      keyid: 4F4EA0AAE5267A6C
+
+runcmd:
+  - apt-get update
+  - apt-get install -y php8.2 php8.2-fpm php8.2-mysql php8.2-mbstring php8.2-xml php8.2-curl php8.2-zip php8.2-gd php8.2-cli
+  - apt-get install -y nginx
+  - debconf-set-selections <<< 'mysql-server mysql-server/root_password password 4TlBM>?Y$fxF;iJw'"'"'dS5'
+  - debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password 4TlBM>?Y$fxF;iJw'"'"'dS5'
+  - apt-get install -y mysql-server
+  - curl -sS https://getcomposer.org/installer | php
+  - mv composer.phar /usr/local/bin/composer
+  - chmod +x /usr/local/bin/composer
+  - mkdir -p /var/www/aula7
+  - chown -R deploy:www-data /var/www/aula7
+  - chmod -R 755 /var/www/aula7
+  - mkdir -p /var/www/aula7/logs
+  - chmod -R 775 /var/www/aula7/logs
+  - chown -R deploy:www-data /var/www/aula7/logs
+  - |
+    mysql -u root -p4TlBM>?Y$fxF;iJw'dS5 <<EOF
+    CREATE DATABASE IF NOT EXISTS aula_php_mvc CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    CREATE USER IF NOT EXISTS 'app_user'@'localhost' IDENTIFIED BY 'YBeuk'"'"'FG%;tazjbCs@w-';
+    GRANT ALL PRIVILEGES ON aula_php_mvc.* TO 'app_user'@'localhost';
+    FLUSH PRIVILEGES;
+    EOF
+  - |
+    cat > /etc/nginx/sites-available/aula7 <<'NGINX_CONFIG'
+    server {
+        listen 80;
+        server_name _;
+        root /var/www/aula7;
+        index index.php;
+
+        access_log /var/log/nginx/aula7_access.log;
+        error_log /var/log/nginx/aula7_error.log;
+
+        client_max_body_size 20M;
+
+        location / {
+            try_files $uri $uri/ /index.php?$query_string;
+        }
+
+        location ~ \.php$ {
+            fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
+            fastcgi_index index.php;
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            include fastcgi_params;
+            fastcgi_read_timeout 300;
+        }
+
+        location ~ /\. {
+            deny all;
+            access_log off;
+            log_not_found off;
+        }
+
+        location ~ ^/(vendor|config|database|tests|\.git|scripts|\.github) {
+            deny all;
+            access_log off;
+            log_not_found off;
+        }
+    }
+NGINX_CONFIG
+  - ln -sf /etc/nginx/sites-available/aula7 /etc/nginx/sites-enabled/
+  - rm -f /etc/nginx/sites-enabled/default
+  - nginx -t
+  - ufw --force enable
+  - ufw allow 22/tcp
+  - ufw allow 80/tcp
+  - ufw allow 443/tcp
+  - ufw default deny incoming
+  - ufw default allow outgoing
+  - systemctl enable fail2ban
+  - systemctl start fail2ban
+  - sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/' /etc/php/8.2/fpm/php.ini
+  - sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 20M/' /etc/php/8.2/fpm/php.ini
+  - sed -i 's/post_max_size = 8M/post_max_size = 20M/' /etc/php/8.2/fpm/php.ini
+  - systemctl restart php8.2-fpm
+  - systemctl restart nginx
+  - systemctl enable php8.2-fpm
+  - systemctl enable nginx
+  - systemctl enable mysql
+
+timezone: America/Sao_Paulo
+
+write_files:
+  - path: /var/www/aula7/.env.example
+    content: |
+      DB_HOST=localhost
+      DB_NAME=aula_php_mvc
+      DB_USER=app_user
+      DB_PASS=YBeuk'FG%;tazjbCs@w-
+      DB_CHARSET=utf8mb4
+      
+      APP_ENV=production
+      APP_DEBUG=false
+      
+      APP_URL=http://IP_DO_SERVIDOR
+      
+      LOG_LEVEL=info
+      LOG_FILE=logs/app.log
+    owner: deploy:www-data
+    permissions: '0644'
+  - path: /home/deploy/setup-completo.sh
+    content: |
+      #!/bin/bash
+      echo "✅ Servidor configurado com sucesso!"
+      echo ""
+      echo "📋 Informações do servidor:"
+      echo "   - PHP: $(php -v | head -n 1)"
+      echo "   - MySQL: $(mysql --version)"
+      echo "   - Nginx: $(nginx -v 2>&1)"
+      echo "   - Composer: $(composer --version)"
+      echo ""
+      echo "📁 Diretório do projeto: /var/www/aula7"
+      echo ""
+      echo "🔐 Credenciais do banco:"
+      echo "   - Banco: aula_php_mvc"
+      echo "   - Usuário: app_user"
+      echo "   - Senha: (configure no .env)"
+      echo ""
+      echo "🚀 Próximos passos:"
+      echo "   1. Fazer deploy do código em /var/www/aula7"
+      echo "   2. Configurar arquivo .env"
+      echo "   3. Importar schema do banco: mysql -u app_user -p aula_php_mvc < database/schema.sql"
+      echo "   4. Acessar: http://$(hostname -I | awk '{print $1}')"
+    owner: deploy:deploy
+    permissions: '0755'
+
+final_message: |
+  ╔══════════════════════════════════════════════════════════════╗
+  ║   Servidor VPS configurado com sucesso!                     ║
+  ╚══════════════════════════════════════════════════════════════╝
+  
+  ✅ PHP 8.2 instalado
+  ✅ MySQL instalado e configurado
+  ✅ Nginx instalado e configurado
+  ✅ Composer instalado
+  ✅ Firewall configurado
+  ✅ Fail2Ban configurado
+  
+  📁 Diretório do projeto: /var/www/aula7
+  👤 Usuário: deploy
+  
+  🔐 IMPORTANTE: Senhas configuradas!
+     - MySQL root: 4TlBM>?Y$fxF;iJw'dS5
+     - MySQL app_user: YBeuk'FG%;tazjbCs@w-
+     - Veja senhas-geradas.txt para referência
+  
+  🚀 Execute: /home/deploy/setup-completo.sh para ver mais informações
+

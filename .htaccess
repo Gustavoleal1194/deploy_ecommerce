@@ -1,0 +1,36 @@
+# Apache .htaccess para o projeto
+# Se estiver usando Nginx, este arquivo não será usado
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Se o projeto estiver em subdiretório, ajuste o RewriteBase
+    # Exemplo: RewriteBase /aula7/
+    RewriteBase /
+    
+    # Redirecionar tudo para index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+
+# Proteger arquivos sensíveis
+<FilesMatch "\.(env|md|json|lock|yml|yaml|sh)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Proteger diretórios
+<IfModule mod_rewrite.c>
+    RewriteRule ^(vendor|config|database|tests|\.git|scripts|\.github) - [F,L]
+</IfModule>
+
+# Desabilitar listagem de diretórios
+Options -Indexes
+
+# Configurações de segurança
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>

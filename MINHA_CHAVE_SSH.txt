@@ -1,0 +1,75 @@
+⚠️ IMPORTANTE: Este arquivo contém sua chave pública SSH
+Você pode compartilhar a chave pública, mas NUNCA compartilhe a chave privada!
+
+================================================================================
+SUA CHAVE PÚBLICA SSH (COPIE TUDO ABAIXO)
+================================================================================
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDAiucb5+/lHBgbwIPLUzdQZYgee5Lh/46YIUkjHDJzVm3R0z9CTFoLaSHxATSvve0/0GMu+b7E0Jyqd0/u4TUDq1fm2/Z+b9hnwt1kNOBEL9ni6KaPbW3g/qnqKLkRWDU6hBryauXDBVOXJ2Fp4er+Q6/GMejLBoNF3vBkDghh4liw9m/9eGXxal3+5DKU57A3bZH9k56jovYwVemZ3aEU3pScFgfDI3NU1IqC86/sAVDh10Z6V8jykIPc/qy2iyvREqp+f0zGNhobWHObYJTnXeyHU5TDcEh0iQT6oQVmuMgu9DGCNHSqnI7fYJrPJTNiEFaAybNTyTRKklRBzahJkE/dt0vc2Bgp23YgqfdfFk4Wsc6ychT8RFNkn3iZSGkh1WuYiVMtbBVFMXaCyvL1cOvoQ9+I442Y/LXDsJu1ivfZOr7eU/aHQqgvS7zx0+E1FKn7IN6uXwK4ggQ8p5Z5Zyd8qqRhqXSd+OUAG2m/uw9l2j2V3ao08mWn+wrnfCmQeYmePjMZ0Jrq6YRcjjBkevKp4VLlQSoeHqJ5lv7dyh0fYzu42AOJZQRhjC4VbWrg43FLxxPqmIBcmDSnpKfC0dgdVx/jzIn0I+hFRBOPcOsrOu9kcEcDYesRf/hNQALnUrIMNLgYkRVC1vslujbGg2aiEr//h8bbNd96oa0F5Q== aula7-vps-20251105
+
+================================================================================
+LOCALIZAÇÃO DAS CHAVES
+================================================================================
+
+Chave Pública: C:\Users\Gustavo Leal\.ssh\id_rsa.pub
+Chave Privada: C:\Users\Gustavo Leal\.ssh\id_rsa
+
+⚠️ NUNCA compartilhe a chave privada (id_rsa)!
+
+================================================================================
+COMO ENVIAR A CHAVE PARA O SERVIDOR VPS
+================================================================================
+
+MÉTODO 1: Automático (Recomendado)
+------------------------------------
+1. Abra o Git Bash
+2. Execute:
+   ssh-copy-id root@IP_DO_SEU_SERVIDOR
+3. Digite a senha do servidor uma vez
+4. Pronto! Conecte sem senha: ssh root@IP_DO_SERVIDOR
+
+MÉTODO 2: Manual
+----------------
+1. Conecte ao servidor:
+   ssh root@IP_DO_SERVIDOR
+
+2. No servidor, execute:
+   mkdir -p ~/.ssh
+   nano ~/.ssh/authorized_keys
+
+3. Cole a chave pública completa (a linha ssh-rsa...)
+   Salve: Ctrl+X, depois Y, depois ENTER
+
+4. Configure permissões:
+   chmod 700 ~/.ssh
+   chmod 600 ~/.ssh/authorized_keys
+
+5. Saia do servidor:
+   exit
+
+6. Teste a conexão:
+   ssh root@IP_DO_SERVIDOR
+
+================================================================================
+INFORMAÇÕES DA CHAVE
+================================================================================
+
+Tipo: RSA 4096 bits
+Gerada em: 2025-11-05
+Comentário: aula7-vps-20251105
+Fingerprint: SHA256:5iVys6MvXNHiMDrpcnBiw8y7CLp5bbCH6zUjsW50e38
+
+================================================================================
+PRÓXIMOS PASSOS
+================================================================================
+
+1. ✅ Chave SSH gerada
+2. ⏳ Enviar chave para o servidor VPS
+3. ⏳ Testar conexão SSH
+4. ⏳ Fazer deploy do projeto (veja GUIA_DEPLOY_VPS.md)
+
+================================================================================
+
+Dica: Guarde este arquivo em local seguro!
+Você precisará da chave pública para adicionar em outros servidores.
+

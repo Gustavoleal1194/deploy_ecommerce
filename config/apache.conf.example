@@ -1,0 +1,47 @@
+# Configuração Apache para o projeto
+# Copie este arquivo para: /etc/apache2/sites-available/aula7.conf
+# Depois: sudo a2ensite aula7.conf
+# Recarregue: sudo systemctl reload apache2
+
+<VirtualHost *:80>
+    ServerName seudominio.com.br
+    ServerAlias www.seudominio.com.br
+    # Se não tiver domínio, remova ServerName e ServerAlias
+    
+    DocumentRoot /var/www/aula7
+    
+    <Directory /var/www/aula7>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    # Logs
+    ErrorLog ${APACHE_LOG_DIR}/aula7_error.log
+    CustomLog ${APACHE_LOG_DIR}/aula7_access.log combined
+
+    # Tamanho máximo de upload
+    LimitRequestBody 20971520
+</VirtualHost>
+
+# Configuração HTTPS (descomente após configurar SSL)
+# <VirtualHost *:443>
+#     ServerName seudominio.com.br
+#     ServerAlias www.seudominio.com.br
+#     
+#     DocumentRoot /var/www/aula7
+#     
+#     SSLEngine on
+#     SSLCertificateFile /etc/letsencrypt/live/seudominio.com.br/fullchain.pem
+#     SSLCertificateKeyFile /etc/letsencrypt/live/seudominio.com.br/privkey.pem
+#     
+#     <Directory /var/www/aula7>
+#         Options Indexes FollowSymLinks
+#         AllowOverride All
+#         Require all granted
+#     </Directory>
+#     
+#     ErrorLog ${APACHE_LOG_DIR}/aula7_ssl_error.log
+#     CustomLog ${APACHE_LOG_DIR}/aula7_ssl_access.log combined
+# </VirtualHost>
+
