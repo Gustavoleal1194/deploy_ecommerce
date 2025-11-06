@@ -29,7 +29,7 @@ try {
 // new teste();
 
 // variavel basedir 
-$basedir = "/aula_php/aula7";
+$basedir = "";
 
 // pega URL crua (sem tratamento)
 $uri = $_SERVER["REQUEST_URI"] ?? "/";
