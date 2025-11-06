@@ -35,6 +35,10 @@ Thumbs.db
 /phpunit.xml.bak
 /coverage/
 .phpunit.result.cache
+relatorio-endpoints.txt
+relatorio-endpoints.json
+relatorio.txt
+relatorio.html
 
 # Docker
 .dockerignore
