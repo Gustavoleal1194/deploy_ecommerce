@@ -3,9 +3,12 @@ parameters:
     paths:
         - app
     excludePaths:
-        - app/Views
         - vendor
         - tests
-    checkMissingIterableValueType: false
-    checkGenericClassInNonGenericObjectType: false
+    bootstrapFiles:
+        - vendor/autoload.php
+    ignoreErrors:
+        - '#missingType\.iterableValue#'
+        - '#missingType\.generics#'
+        - '#Static property App\\Logger::\$levels is never read#'
 
