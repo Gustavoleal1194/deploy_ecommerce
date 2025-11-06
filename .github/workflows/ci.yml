@@ -212,8 +212,22 @@ jobs:
 
       - name: 🔍 Testar conexão SSH
         run: |
-          ssh -v -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o BatchMode=yes ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "echo '✅ Conexão SSH OK'"
-        continue-on-error: true
+          echo "🔍 Testando conexão SSH..."
+          if ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o BatchMode=yes -o ConnectTimeout=10 ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "echo '✅ Conexão SSH OK'" 2>&1; then
+            echo "✅ Conexão SSH estabelecida com sucesso!"
+          else
+            echo "❌ ERRO: Falha na autenticação SSH"
+            echo ""
+            echo "📋 Possíveis causas:"
+            echo "1. A chave SSH tem passphrase (senha) - GitHub Actions não suporta isso"
+            echo "2. A chave pública não está no authorized_keys do servidor"
+            echo "3. Formato da chave incorreto no GitHub Secrets"
+            echo ""
+            echo "🔧 Solução:"
+            echo "Execute no servidor: ./scripts/configurar-chave-github-actions.sh"
+            echo "Ou siga: EXECUTAR_NO_SERVIDOR.md"
+            exit 1
+          fi
 
       - name: 🚀 Deploy via SSH
         run: |
