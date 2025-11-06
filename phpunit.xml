@@ -3,11 +3,9 @@
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="vendor/autoload.php"
          colors="true"
-         verbose="true"
          stopOnFailure="false"
          cacheDirectory=".phpunit.cache"
-         backupGlobals="false"
-         backupStaticAttributes="false">
+         backupGlobals="false">
     <testsuites>
         <testsuite name="Unit">
             <directory suffix="Test.php">tests/Unit</directory>
@@ -27,10 +25,10 @@
     </coverage>
     <php>
         <env name="APP_ENV" value="testing"/>
-        <env name="DB_HOST" value="localhost"/>
-        <env name="DB_NAME" value="aula_php_mvc_test"/>
-        <env name="DB_USER" value="root"/>
-        <env name="DB_PASS" value=""/>
+        <env name="DB_HOST" value="127.0.0.1" force="false"/>
+        <env name="DB_NAME" value="aula_php_mvc_test" force="false"/>
+        <env name="DB_USER" value="root" force="false"/>
+        <env name="DB_PASS" value="rootpassword" force="false"/>
     </php>
 </phpunit>
 
