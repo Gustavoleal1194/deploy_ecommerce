@@ -28,14 +28,20 @@ class EndpointTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        // Limpar relatório antes de cada teste
-        self::$relatorio = [];
+        // NÃO limpar relatório - acumular dados de todos os testes
     }
 
     public static function tearDownAfterClass(): void
     {
         // Gerar relatório final
         self::gerarRelatorio();
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        // Limpar variáveis globais após cada teste
+        unset($_GET, $_POST, $_SESSION);
     }
 
     /**
@@ -309,8 +315,14 @@ class EndpointTest extends TestCase
      */
     private static function gerarRelatorio(): void
     {
+        if (empty(self::$relatorio)) {
+            echo "\n⚠ Nenhum dado coletado para relatório\n";
+            return;
+        }
+
         $output = "=== RELATÓRIO DE TESTES DE ENDPOINTS ===\n\n";
-        $output .= "Data: " . date('Y-m-d H:i:s') . "\n\n";
+        $output .= "Data: " . date('Y-m-d H:i:s') . "\n";
+        $output .= "Total de endpoints testados: " . count(self::$relatorio) . "\n\n";
         
         foreach (self::$relatorio as $endpoint => $dados) {
             $output .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
@@ -329,17 +341,24 @@ class EndpointTest extends TestCase
             $output .= "\n";
         }
         
-        // Salvar em arquivo
+        // Salvar em arquivo (caminho absoluto)
         $arquivo = __DIR__ . '/../../relatorio-endpoints.txt';
-        file_put_contents($arquivo, $output);
+        $baseDir = dirname(__DIR__, 2);
+        $arquivo = $baseDir . '/relatorio-endpoints.txt';
+        
+        if (file_put_contents($arquivo, $output) !== false) {
+            echo "\n✅ Relatório texto salvo em: {$arquivo}\n";
+        } else {
+            echo "\n❌ Erro ao salvar relatório texto\n";
+        }
         
         // Também gerar JSON
-        $jsonFile = __DIR__ . '/../../relatorio-endpoints.json';
-        file_put_contents($jsonFile, json_encode(self::$relatorio, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-        
-        echo "\n📄 Relatórios gerados:\n";
-        echo "   - relatorio-endpoints.txt\n";
-        echo "   - relatorio-endpoints.json\n";
+        $jsonFile = $baseDir . '/relatorio-endpoints.json';
+        if (file_put_contents($jsonFile, json_encode(self::$relatorio, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)) !== false) {
+            echo "✅ Relatório JSON salvo em: {$jsonFile}\n";
+        } else {
+            echo "❌ Erro ao salvar relatório JSON\n";
+        }
     }
 }
 
