@@ -141,6 +141,61 @@ jobs:
       - name: ✅ Verificar imagem Docker
         run: docker images aula7-mvc:latest
 
+  deploy:
+    name: 🚀 Deploy para VPS
+    runs-on: ubuntu-latest
+    needs: [test, security]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+      - name: 📥 Checkout código
+        uses: actions/checkout@v4
+
+      - name: 🔐 Configurar SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+
+      - name: 🔑 Adicionar servidor ao known_hosts
+        run: |
+          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+
+      - name: 🚀 Deploy via SSH
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << EOF
+            set -e
+            echo "🚀 Iniciando deploy..."
+            
+            cd ${{ secrets.VPS_PATH }}
+            
+            echo "📥 Atualizando código do repositório..."
+            git fetch origin
+            git reset --hard origin/main
+            
+            echo "📦 Instalando dependências do Composer..."
+            composer install --no-dev --optimize-autoloader --no-interaction
+            
+            echo "🔄 Regenerando autoloader..."
+            composer dump-autoload
+            
+            echo "📝 Ajustando permissões..."
+            chown -R www-data:www-data ${{ secrets.VPS_PATH }}
+            chmod -R 755 ${{ secrets.VPS_PATH }}
+            chmod -R 775 logs 2>/dev/null || true
+            
+            echo "♻️  Recarregando serviços..."
+            systemctl reload php8.2-fpm 2>/dev/null || true
+            systemctl reload nginx 2>/dev/null || true
+            
+            echo "✅ Deploy concluído com sucesso!"
+            echo "🌐 URL: http://${{ secrets.VPS_HOST }}"
+          EOF
+
+      - name: ✅ Verificar deploy
+        run: |
+          echo "🔍 Verificando se o deploy foi bem-sucedido..."
+          curl -f -s -o /dev/null -w "Status: %{http_code}\n" http://${{ secrets.VPS_HOST }}/ || echo "⚠️  Aviso: Não foi possível verificar o status HTTP"
+
   summary:
     name: ✅ Resumo do Pipeline
     runs-on: ubuntu-latest
