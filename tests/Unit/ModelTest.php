@@ -24,19 +24,22 @@ class ModelTest extends TestCase
         $this->assertTrue(class_exists(Produto::class));
     }
 
-    public function testCategoriaValidation(): void
+    public function testCategoriaValidationNomeVazio(): void
     {
         // Teste: tentar criar categoria com nome vazio deve lançar exceção
         $this->expectException(\Exception::class);
         Categoria::criar('');
     }
 
-    public function testProdutoValidation(): void
+    public function testProdutoValidationPrecoInvalido(): void
     {
         // Teste: preço inválido deve lançar exceção
         $this->expectException(\Exception::class);
         Produto::criar('Produto Teste', -100, 1);
-        
+    }
+    
+    public function testProdutoValidationNomeVazio(): void
+    {
         // Teste: nome vazio deve lançar exceção
         $this->expectException(\Exception::class);
         Produto::criar('', 100.50, 1);
