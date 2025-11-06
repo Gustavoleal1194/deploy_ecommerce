@@ -2,6 +2,7 @@
   "name": "aula7/mvc",
   "description": "Sistema de Gerenciamento de Produtos com DevOps",
   "type": "project",
+  "license": "proprietary",
   "require": {
     "php": "^8.2",
     "ext-pdo": "*",
