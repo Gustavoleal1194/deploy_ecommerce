@@ -5,7 +5,12 @@ parameters:
     excludePaths:
         - vendor
         - tests
-        - app/Views
+        - app/Views/auth/**
+        - app/Views/Categorias/**
+        - app/Views/Produtos/**
+        - app/Views/usuarios/**
+        - app/Views/header.php
+        - app/Views/layout.php
     bootstrapFiles:
         - vendor/autoload.php
     ignoreErrors:
