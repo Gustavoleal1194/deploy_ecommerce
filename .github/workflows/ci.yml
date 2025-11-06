@@ -116,6 +116,10 @@ jobs:
       - name: 🔍 Análise estática com PHPStan
         run: composer phpstan
 
+      - name: 🔧 Corrigir padrões de código automaticamente
+        run: composer cs-fix
+        continue-on-error: true
+
       - name: ✨ Verificar padrões de código (PHPCS)
         run: composer cs-check
 
