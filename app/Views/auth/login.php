@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $title ?? 'Login' ?></title>
+    <title><?= $title ?? 'Entrar' ?></title>
     <style>
         * {
             margin: 0;
@@ -99,7 +99,7 @@
 </head>
 <body>
     <div class="login-container">
-        <h1>Login</h1>
+        <h1>Entrar</h1>
         
         <!-- Mensagens -->
         <?php if (isset($_GET['mensagem'])): ?>

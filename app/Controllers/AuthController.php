@@ -17,7 +17,7 @@ class AuthController
             exit;
         }
 
-        $title = "Login";
+        $title = "Entrar";
         return (new Render())->render('auth/login', compact('title'));
     }
 
