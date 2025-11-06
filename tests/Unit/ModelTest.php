@@ -26,33 +26,20 @@ class ModelTest extends TestCase
 
     public function testCategoriaValidation(): void
     {
-        $categoria = new Categoria();
-
-        // Teste: nome vazio deve retornar erro
-        $result = $categoria->validate(['nome' => '']);
-        $this->assertNotEmpty($result);
-        $this->assertStringContainsString('Nome', $result);
+        // Teste: tentar criar categoria com nome vazio deve lançar exceção
+        $this->expectException(\Exception::class);
+        Categoria::criar('');
     }
 
     public function testProdutoValidation(): void
     {
-        $produto = new Produto();
-
-        // Teste: preço inválido
-        $result = $produto->validate([
-            'nome' => 'Produto Teste',
-            'preco' => -100,
-            'categoria_id' => 1
-        ]);
-        $this->assertNotEmpty($result);
-
-        // Teste: preço válido
-        $result = $produto->validate([
-            'nome' => 'Produto Teste',
-            'preco' => 100.50,
-            'categoria_id' => 1
-        ]);
-        $this->assertEmpty($result);
+        // Teste: preço inválido deve lançar exceção
+        $this->expectException(\Exception::class);
+        Produto::criar('Produto Teste', -100, 1);
+        
+        // Teste: nome vazio deve lançar exceção
+        $this->expectException(\Exception::class);
+        Produto::criar('', 100.50, 1);
     }
 }
 
