@@ -99,7 +99,7 @@
 </head>
 <body>
     <div class="login-container">
-        <h1>Entrar</h1>
+        <h1>Login</h1>
         
         <!-- Mensagens -->
         <?php if (isset($_GET['mensagem'])): ?>
