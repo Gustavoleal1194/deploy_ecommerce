@@ -31,7 +31,6 @@ Thumbs.db
 /storage/cache/
 
 # Testes
-/phpunit.xml
 /phpunit.xml.bak
 /coverage/
 .phpunit.result.cache
