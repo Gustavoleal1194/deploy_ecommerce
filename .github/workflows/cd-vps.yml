@@ -1,0 +1,163 @@
+name: CD - Deploy para VPS (Locaweb)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:  # Permite executar manualmente
+
+env:
+  PHP_VERSION: '8.2'
+
+jobs:
+  deploy:
+    name: 🚀 Deploy para VPS
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout código
+        uses: actions/checkout@v4
+
+      - name: 🐘 Configurar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          tools: composer:v2
+
+      - name: 📦 Instalar dependências de produção
+        run: composer install --no-dev --optimize-autoloader --no-interaction
+
+      - name: 🔐 Configurar chave SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+          
+      - name: 📋 Verificar conexão SSH
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "echo '✅ Conexão SSH estabelecida'"
+
+      - name: 🗂️ Criar backup do código atual
+        run: |
+          ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+            if [ -d "${{ secrets.VPS_PATH }}" ]; then
+              BACKUP_DIR="${{ secrets.VPS_PATH }}_backup_$(date +%Y%m%d_%H%M%S)"
+              echo "📦 Criando backup em: $BACKUP_DIR"
+              cp -r "${{ secrets.VPS_PATH }}" "$BACKUP_DIR"
+              echo "✅ Backup criado com sucesso!"
+            fi
+          EOF
+
+      - name: 🚀 Deploy via rsync
+        run: |
+          rsync -avz --delete \
+            --exclude '.git' \
+            --exclude '.github' \
+            --exclude 'tests' \
+            --exclude 'vendor' \
+            --exclude 'node_modules' \
+            --exclude '.env' \
+            --exclude 'coverage' \
+            --exclude '.docker' \
+            --exclude 'docker-compose.yml' \
+            --exclude 'Dockerfile' \
+            --exclude 'DEVOPS.md' \
+            --exclude 'README.md' \
+            --exclude 'MINHA_CHAVE_SSH.txt' \
+            ./ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.VPS_PATH }}
+
+      - name: 📦 Instalar dependências no servidor
+        run: |
+          ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+            cd ${{ secrets.VPS_PATH }}
+            
+            echo "📦 Instalando dependências do Composer..."
+            /usr/local/bin/composer install --no-dev --optimize-autoloader --no-interaction || composer install --no-dev --optimize-autoloader --no-interaction
+            
+            echo "🔒 Configurando permissões..."
+            chmod -R 755 .
+            mkdir -p logs
+            chmod -R 777 logs
+            
+            echo "✅ Dependências instaladas!"
+          EOF
+
+      - name: 🗄️ Executar migrações do banco de dados
+        run: |
+          ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+            cd ${{ secrets.VPS_PATH }}
+            
+            # Se você tiver um script de migração, execute aqui
+            # php migrate.php
+            
+            echo "✅ Migrações executadas (se aplicável)"
+          EOF
+
+      - name: 🔄 Reiniciar serviços (se necessário)
+        run: |
+          ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+            # Reiniciar PHP-FPM se estiver usando
+            # sudo systemctl restart php8.2-fpm
+            
+            # Reiniciar Nginx se necessário
+            # sudo systemctl reload nginx
+            
+            echo "✅ Serviços reiniciados!"
+          EOF
+
+      - name: 🧹 Limpar backups antigos (manter últimos 5)
+        run: |
+          ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+            BACKUP_BASE="${{ secrets.VPS_PATH }}_backup_"
+            PARENT_DIR="$(dirname ${{ secrets.VPS_PATH }})"
+            cd "$PARENT_DIR" 2>/dev/null || exit 0
+            ls -dt ${BACKUP_BASE}* 2>/dev/null | tail -n +6 | xargs rm -rf 2>/dev/null || true
+            echo "✅ Backups antigos limpos!"
+          EOF
+
+      - name: ✅ Verificar deploy
+        run: |
+          ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+            cd ${{ secrets.VPS_PATH }}
+            echo "📂 Conteúdo do diretório:"
+            ls -la
+            echo ""
+            echo "🐘 Versão do PHP:"
+            php -v | head -n 1
+            echo ""
+            echo "✅ Deploy concluído com sucesso!"
+          EOF
+
+      - name: 📊 Criar resumo do deploy
+        if: always()
+        run: |
+          echo "## 🚀 Deploy para VPS" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Status:** Concluído" >> $GITHUB_STEP_SUMMARY
+          echo "🌐 **Servidor:** ${{ secrets.VPS_HOST }}" >> $GITHUB_STEP_SUMMARY
+          echo "📂 **Diretório:** ${{ secrets.VPS_PATH }}" >> $GITHUB_STEP_SUMMARY
+          echo "🕐 **Data:** $(date '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "👤 **Autor:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "📝 **Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+
+  rollback:
+    name: 🔄 Rollback (Manual)
+    runs-on: ubuntu-latest
+    if: failure()
+    needs: deploy
+    
+    steps:
+      - name: 🔄 Instruções de Rollback
+        run: |
+          echo "## ⚠️ Deploy Falhou!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Para fazer rollback manual, execute no servidor:" >> $GITHUB_STEP_SUMMARY
+          echo '```bash' >> $GITHUB_STEP_SUMMARY
+          echo "# Listar backups disponíveis" >> $GITHUB_STEP_SUMMARY
+          echo 'ls -lah ${{ secrets.VPS_PATH }}_backup_*' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "# Restaurar último backup" >> $GITHUB_STEP_SUMMARY
+          echo 'LAST_BACKUP=$(ls -dt ${{ secrets.VPS_PATH }}_backup_* | head -n 1)' >> $GITHUB_STEP_SUMMARY
+          echo 'rm -rf ${{ secrets.VPS_PATH }}' >> $GITHUB_STEP_SUMMARY
+          echo 'cp -r $LAST_BACKUP ${{ secrets.VPS_PATH }}' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY

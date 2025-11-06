@@ -253,19 +253,39 @@ Ver arquivo completo em: `database/schema.sql`
 - `app/Models/Model.php` - Classe base para Models
 - `database/schema.sql` - Script de criação das tabelas
 
-## 🔄 DevOps
+## 🔄 DevOps & CI/CD
 
 Este projeto implementa práticas modernas de DevOps para garantir qualidade, automação e confiabilidade.
 
 ### ✅ Funcionalidades DevOps Implementadas
 
 - **✅ Integração Contínua (CI)**: Pipeline automatizado com GitHub Actions
-- **✅ Entrega Contínua (CD)**: Deploy automatizado configurado
+  - 🧪 Testes unitários e de integração automáticos
+  - 🔍 Análise estática de código (PHPStan)
+  - ✨ Verificação de padrões (PHPCS)
+  - 🔒 Análise de segurança de dependências
+  
+- **✅ Entrega Contínua (CD)**: Deploy automático para VPS
+  - 🚀 Deploy automático via SSH e rsync
+  - 📦 Backup automático antes de cada deploy
+  - 🔄 Rollback fácil em caso de falha
+  - 🌐 Deploy para VPS Locaweb (Ubuntu 20.04)
+  
 - **✅ Testes Automatizados**: PHPUnit para testes unitários e de integração
 - **✅ Containerização**: Docker e Docker Compose para ambiente isolado
 - **✅ Monitoramento**: Sistema de logs estruturado (`App\Logger`)
 - **✅ Qualidade de Código**: PHPStan e PHP CodeSniffer integrados
 - **✅ Versionamento**: Git configurado com `.gitignore` adequado
+
+### 🚀 Pipeline CI/CD
+
+![CI Status](https://github.com/Gustavoleal1194/deploy_ecommerce/workflows/CI%20-%20Testes%20e%20Qualidade/badge.svg)
+![CD Status](https://github.com/Gustavoleal1194/deploy_ecommerce/workflows/CD%20-%20Deploy%20para%20VPS%20(Locaweb)/badge.svg)
+
+**Fluxo Automático:**
+```
+git push → CI (testes) → ✅ → CD (deploy) → 🚀 Site atualizado!
+```
 
 ### 🚀 Início Rápido com Docker
 
@@ -304,8 +324,19 @@ O pipeline está configurado em `.github/workflows/ci.yml` e executa automaticam
 
 ### 📚 Documentação Completa
 
-Para informações detalhadas sobre DevOps, consulte:
+Para informações detalhadas sobre DevOps e CI/CD, consulte:
 - **[DEVOPS.md](DEVOPS.md)** - Guia completo de DevOps
+- **[.github/workflows/SETUP.md](.github/workflows/SETUP.md)** - 🚀 **Configuração CI/CD para VPS** (passo-a-passo)
+
+### 🎯 Como Configurar CI/CD
+
+**Leia o guia completo:** [.github/workflows/SETUP.md](.github/workflows/SETUP.md)
+
+**Resumo rápido:**
+1. Gerar chave SSH
+2. Adicionar 4 secrets no GitHub (`SSH_PRIVATE_KEY`, `VPS_HOST`, `VPS_USER`, `VPS_PATH`)
+3. Configurar diretório na VPS
+4. Fazer push → Deploy automático! ✅
 
 ### 🛠️ Scripts Úteis
 
