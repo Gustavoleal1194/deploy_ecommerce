@@ -17,12 +17,13 @@ if (file_exists($envFile)) {
     }
 }
 
+// Variáveis de ambiente do sistema têm precedência (útil para CI/CD)
 return [
-    'host' => $env['DB_HOST'] ?? 'localhost',
-    'dbname' => $env['DB_NAME'] ?? 'aula_php_mvc',
-    'user' => $env['DB_USER'] ?? 'root',
-    'pass' => $env['DB_PASS'] ?? '',
-    'charset' => $env['DB_CHARSET'] ?? 'utf8mb4',
+    'host' => getenv('DB_HOST') ?: ($env['DB_HOST'] ?? 'localhost'),
+    'dbname' => getenv('DB_NAME') ?: ($env['DB_NAME'] ?? 'aula_php_mvc'),
+    'user' => getenv('DB_USER') ?: ($env['DB_USER'] ?? 'root'),
+    'pass' => getenv('DB_PASS') ?: ($env['DB_PASS'] ?? ''),
+    'charset' => getenv('DB_CHARSET') ?: ($env['DB_CHARSET'] ?? 'utf8mb4'),
     'options' => [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
