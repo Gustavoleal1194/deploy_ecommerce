@@ -37,7 +37,7 @@ class ModelTest extends TestCase
         $this->expectException(\Exception::class);
         Produto::criar('Produto Teste', -100, 1);
     }
-    
+
     public function testProdutoValidationNomeVazio(): void
     {
         // Teste: nome vazio deve lançar exceção
