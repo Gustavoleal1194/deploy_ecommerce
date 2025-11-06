@@ -1,29 +1,30 @@
 <?php
-    namespace App\Views;
 
-    class Render {
-        function render(
-            string $view,
-            array $params = []
-        ) {
-            // extrair todos os parametros
-            // para criar variaveis
-            extract($params);
+namespace App\Views;
 
-            // start o cacha ob_start
-            ob_start();
+class Render
+{
+    public function render(
+        string $view,
+        array $params = []
+    ): string {
+        // extrair todos os parametros
+        // para criar variaveis
+        extract($params);
 
-            // chamar aqui os arquivos de views
-            require __DIR__ . "/$view.php";
+        // start o cache ob_start
+        ob_start();
 
-            // colocar o conteudo da view dentro de uma
-            // variavel
-            $conteudo = ob_get_clean();
+        // chamar aqui os arquivos de views
+        require __DIR__ . "/$view.php";
 
-            ob_start();
-            // renderizando a nossa master page
-            require __DIR__ . "/layout.php";
-            return ob_get_clean();
-        }
+        // colocar o conteudo da view dentro de uma
+        // variavel
+        $conteudo = ob_get_clean();
+
+        ob_start();
+        // renderizando a nossa master page
+        require __DIR__ . "/layout.php";
+        return ob_get_clean();
     }
-?>
+}
