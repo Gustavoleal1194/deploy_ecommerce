@@ -5,6 +5,7 @@ parameters:
     excludePaths:
         - app/Views
         - vendor
+        - tests
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
 

@@ -44,6 +44,11 @@ class Categoria extends Model
      */
     public static function criar(string $nome): int
     {
+        // Validar nome vazio
+        if (empty(trim($nome))) {
+            throw new \Exception("Nome da categoria é obrigatório!");
+        }
+
         // Validar se já existe
         if (self::findByNome($nome)) {
             throw new \Exception("Categoria '{$nome}' já existe!");
