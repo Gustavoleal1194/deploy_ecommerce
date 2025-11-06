@@ -258,7 +258,26 @@ jobs:
             
             echo "✅ Deploy concluído com sucesso!"
             echo "🌐 URL: http://${{ secrets.VPS_HOST }}"
+            
+            echo ""
+            echo "📋 Verificando logs de erro recentes..."
+            tail -20 /var/log/nginx/aula7_error.log 2>/dev/null || tail -20 /var/log/nginx/error.log 2>/dev/null || echo "Nenhum log de erro encontrado"
           EOF
+
+      - name: 🔍 Verificar se o deploy foi bem-sucedido
+        run: |
+          echo "🔍 Verificando se a aplicação está respondendo..."
+          sleep 5
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://${{ secrets.VPS_HOST }}/login || echo "000")
+          if [ "$HTTP_CODE" = "200" ]; then
+            echo "✅ Aplicação está respondendo corretamente (HTTP $HTTP_CODE)"
+          else
+            echo "⚠️  Aplicação retornou HTTP $HTTP_CODE"
+            echo "📋 Execute no servidor para diagnosticar:"
+            echo "   tail -50 /var/log/nginx/aula7_error.log"
+            echo "   tail -50 /var/log/php8.2-fpm.log"
+          fi
+        continue-on-error: true
 
       - name: ✅ Verificar deploy
         run: |
