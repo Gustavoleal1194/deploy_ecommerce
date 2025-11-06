@@ -14,7 +14,7 @@ class ProdutoController
         $categorias = Categoria::all();
 
         return (new Render())->render(
-            'produtos/index',
+            'Produtos/index',
             compact('title', 'produtos', 'categorias')
         );
     }
@@ -24,7 +24,7 @@ class ProdutoController
         $title = "Novo Produto";
         $categorias = Categoria::all();
         return (new Render())->render(
-            'produtos/criar',
+            'Produtos/criar',
             compact('title', 'categorias')
         );
     }
@@ -39,7 +39,7 @@ class ProdutoController
         }
 
         return (new Render())->render(
-            'produtos/ver',
+            'Produtos/ver',
             compact('title', 'produto')
         );
     }
@@ -102,7 +102,7 @@ class ProdutoController
 
         $categorias = Categoria::all();
         return (new Render())->render(
-            'produtos/editar',
+            'Produtos/editar',
             compact('title', 'produto', 'categorias')
         );
     }
@@ -142,7 +142,7 @@ class ProdutoController
         $categorias = Categoria::all();
 
         return (new Render())->render(
-            'produtos/resultados_busca',
+            'Produtos/resultados_busca',
             compact('title', 'produtos', 'categorias', 'termo')
         );
     }

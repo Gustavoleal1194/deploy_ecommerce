@@ -12,7 +12,7 @@ class CategoriaController
         $title = "Categorias";
         $categorias = Categoria::all();
         return (new Render())->render(
-            'categorias/index',
+            'Categorias/index',
             compact('title', 'categorias')
         );
     }
@@ -21,7 +21,7 @@ class CategoriaController
     {
         $title = "Nova Categoria";
         return (new Render())->render(
-            'categorias/criar',
+            'Categorias/criar',
             compact('title')
         );
     }
@@ -37,7 +37,7 @@ class CategoriaController
         }
 
         return (new Render())->render(
-            'categorias/ver',
+            'Categorias/ver',
             compact('title', 'categoria')
         );
     }
@@ -101,7 +101,7 @@ class CategoriaController
         }
 
         return (new Render())->render(
-            'categorias/editar',
+            'Categorias/editar',
             compact('title', 'categoria')
         );
     }
@@ -141,7 +141,7 @@ class CategoriaController
         $title = "Resultados da Busca: " . htmlspecialchars($termo);
 
         return (new Render())->render(
-            'categorias/resultados_busca',
+            'Categorias/resultados_busca',
             compact('title', 'categorias', 'termo')
         );
     }
