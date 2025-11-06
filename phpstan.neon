@@ -5,10 +5,9 @@ parameters:
     excludePaths:
         - vendor
         - tests
+        - app/Views
     bootstrapFiles:
         - vendor/autoload.php
     ignoreErrors:
-        - '#missingType\.iterableValue#'
-        - '#missingType\.generics#'
         - '#Static property App\\Logger::\$levels is never read#'
 
