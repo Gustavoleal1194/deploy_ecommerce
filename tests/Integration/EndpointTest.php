@@ -101,25 +101,53 @@ class EndpointTest extends TestCase
     public function testPostCategorias(): void
     {
         $controller = new CategoriaController();
+        $nomeCategoria = 'Categoria Teste ' . time();
         $_POST = [
-            'nome' => 'Categoria Teste ' . time()
+            'nome' => $nomeCategoria
         ];
         
-        $response = $controller->create();
-        $data = json_decode($response, true);
+        // Capturar headers e output
+        ob_start();
+        $headers = [];
         
-        $this->assertIsString($response);
-        $this->assertIsArray($data);
-        
-        if (isset($data['id'])) {
-            self::$categoriaId = (int)$data['id'];
+        try {
+            // Interceptar headers
+            $originalHeader = function($header) use (&$headers) {
+                $headers[] = $header;
+            };
+            
+            // Chamar create (faz redirect, então não retorna)
+            $controller->create();
+        } catch (\Exception $e) {
+            // Se der erro, capturar
         }
         
-        self::$relatorio['POST /api/categorias'] = [
-            'status' => isset($data['id']) ? 'OK' : 'ERRO',
-            'request' => $_POST,
-            'response' => $data
-        ];
+        $output = ob_get_clean();
+        
+        // Verificar se a categoria foi criada
+        $categoria = Categoria::findByNome($nomeCategoria);
+        
+        if ($categoria) {
+            self::$categoriaId = (int)$categoria['id'];
+            self::$relatorio['POST /api/categorias'] = [
+                'status' => 'OK',
+                'request' => $_POST,
+                'response' => [
+                    'redirect' => true,
+                    'headers' => $headers,
+                    'categoria_id' => self::$categoriaId,
+                    'categoria' => $categoria
+                ]
+            ];
+        } else {
+            self::$relatorio['POST /api/categorias'] = [
+                'status' => 'ERRO',
+                'request' => $_POST,
+                'response' => ['erro' => 'Categoria não foi criada']
+            ];
+        }
+        
+        $this->assertTrue($categoria !== false, 'Categoria deveria ter sido criada');
     }
 
     /**
@@ -179,30 +207,61 @@ class EndpointTest extends TestCase
     public function testPostProdutos(): void
     {
         if (self::$categoriaId === 0) {
-            $this->markTestSkipped('Nenhuma categoria disponível para criar produto');
-            return;
+            // Tentar pegar qualquer categoria
+            $categorias = Categoria::all();
+            if (empty($categorias)) {
+                $this->markTestSkipped('Nenhuma categoria disponível para criar produto');
+                return;
+            }
+            self::$categoriaId = (int)$categorias[0]['id'];
         }
 
         $controller = new ProdutoController();
+        $nomeProduto = 'Produto Teste ' . time();
         $_POST = [
-            'nome' => 'Produto Teste ' . time(),
+            'nome' => $nomeProduto,
             'preco' => 99.99,
             'categoria_id' => self::$categoriaId
         ];
         
         ob_start();
-        $controller->create();
+        try {
+            $controller->create();
+        } catch (\Exception $e) {
+            // Ignorar
+        }
         $output = ob_get_clean();
         
-        // O create() faz redirect, então vamos verificar se o produto foi criado
+        // Verificar se o produto foi criado
         $produtos = Produto::all();
-        $produtoCriado = end($produtos);
+        $produtoCriado = null;
+        foreach ($produtos as $p) {
+            if ($p['nome'] === $nomeProduto) {
+                $produtoCriado = $p;
+                break;
+            }
+        }
         
-        self::$relatorio['POST /api/produtos'] = [
-            'status' => 'OK',
-            'request' => $_POST,
-            'response' => ['redirect' => true, 'produto_id' => $produtoCriado['id'] ?? null]
-        ];
+        if ($produtoCriado) {
+            self::$produtoId = (int)$produtoCriado['id'];
+            self::$relatorio['POST /api/produtos'] = [
+                'status' => 'OK',
+                'request' => $_POST,
+                'response' => [
+                    'redirect' => true,
+                    'produto_id' => self::$produtoId,
+                    'produto' => $produtoCriado
+                ]
+            ];
+        } else {
+            self::$relatorio['POST /api/produtos'] = [
+                'status' => 'ERRO',
+                'request' => $_POST,
+                'response' => ['erro' => 'Produto não foi criado']
+            ];
+        }
+        
+        $this->assertNotNull($produtoCriado, 'Produto deveria ter sido criado');
     }
 
     /**
