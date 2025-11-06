@@ -14,7 +14,7 @@
 
     <p>Encontrados <?= count($produtos) ?> produto(s):</p>
 
-    <a href="/aula_php/aula7/produtos">← Voltar para Produtos</a>
+    <a href="/produtos">← Voltar para Produtos</a>
 
     <hr>
 
@@ -35,7 +35,7 @@
         <?php foreach ($produtos as $item): ?>
             <li>
                 <h3>
-                    <a href="/aula_php/aula7/produtos/ver?id=<?= $item['id'] ?>">
+                    <a href="/produtos/ver?id=<?= $item['id'] ?>">
                         <?= htmlspecialchars($item['nome']) ?>
                     </a>
                 </h3>
@@ -46,14 +46,14 @@
                 if ($categoria):
                     ?>
                     <p>Categoria:
-                        <a href="/aula_php/aula7/categorias/ver?id=<?= $categoria['id'] ?>">
+                        <a href="/categorias/ver?id=<?= $categoria['id'] ?>">
                             <?= htmlspecialchars($categoria['nome']) ?>
                         </a>
                     </p>
                 <?php endif; ?>
 
-                <a href="/aula_php/aula7/produtos/editar?id=<?= $item['id'] ?>">Editar</a>
-                <a href="/aula_php/aula7/produtos/ver?id=<?= $item['id'] ?>">Ver Detalhes</a>
+                <a href="/produtos/editar?id=<?= $item['id'] ?>">Editar</a>
+                <a href="/produtos/ver?id=<?= $item['id'] ?>">Ver Detalhes</a>
 
                 <hr>
             </li>

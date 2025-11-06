@@ -34,7 +34,7 @@ class ProdutoController
         $produto = Produto::find($id);
 
         if (!$produto) {
-            header('Location: /aula_php/aula7/produtos?erro=' . urlencode("Produto não encontrado!"));
+            header('Location: /produtos?erro=' . urlencode("Produto não encontrado!"));
             exit;
         }
 
@@ -68,14 +68,14 @@ class ProdutoController
         if (isset($_POST['nome'], $_POST['preco'], $_POST['categoria_id'])) {
             try {
                 Produto::criar($_POST['nome'], (float) $_POST['preco'], (int) $_POST['categoria_id']);
-                header('Location: /aula_php/aula7/produtos?mensagem=' . urlencode("Produto adicionado com sucesso!"));
+                header('Location: /produtos?mensagem=' . urlencode("Produto adicionado com sucesso!"));
                 exit;
             } catch (\Exception $e) {
-                header('Location: /aula_php/aula7/produtos/criar?erro=' . urlencode($e->getMessage()));
+                header('Location: /produtos/criar?erro=' . urlencode($e->getMessage()));
                 exit;
             }
         } else {
-            header('Location: /aula_php/aula7/produtos/criar?erro=' . urlencode("Dados incompletos!"));
+            header('Location: /produtos/criar?erro=' . urlencode("Dados incompletos!"));
             exit;
         }
     }
@@ -83,10 +83,10 @@ class ProdutoController
     {
         try {
             Produto::deletar($id);
-            header('Location: /aula_php/aula7/produtos?mensagem=' . urlencode("Produto removido com sucesso!"));
+            header('Location: /produtos?mensagem=' . urlencode("Produto removido com sucesso!"));
             exit;
         } catch (\Exception $e) {
-            header('Location: /aula_php/aula7/produtos?erro=' . urlencode($e->getMessage()));
+            header('Location: /produtos?erro=' . urlencode($e->getMessage()));
             exit;
         }
     }
@@ -96,7 +96,7 @@ class ProdutoController
         $produto = Produto::find($id);
 
         if (!$produto) {
-            header('Location: /aula_php/aula7/produtos?erro=' . urlencode("Produto não encontrado!"));
+            header('Location: /produtos?erro=' . urlencode("Produto não encontrado!"));
             exit;
         }
 
@@ -112,14 +112,14 @@ class ProdutoController
         if (isset($_POST['nome'], $_POST['preco'], $_POST['categoria_id'])) {
             try {
                 Produto::atualizar($id, $_POST['nome'], (float) $_POST['preco'], (int) $_POST['categoria_id']);
-                header('Location: /aula_php/aula7/produtos?mensagem=' . urlencode("Produto atualizado com sucesso!"));
+                header('Location: /produtos?mensagem=' . urlencode("Produto atualizado com sucesso!"));
                 exit;
             } catch (\Exception $e) {
-                header('Location: /aula_php/aula7/produtos/editar?id=' . $id . '&erro=' . urlencode($e->getMessage()));
+                header('Location: /produtos/editar?id=' . $id . '&erro=' . urlencode($e->getMessage()));
                 exit;
             }
         } else {
-            header('Location: /aula_php/aula7/produtos/editar?id=' . $id . '&erro=' . urlencode("Dados incompletos!"));
+            header('Location: /produtos/editar?id=' . $id . '&erro=' . urlencode("Dados incompletos!"));
             exit;
         }
     }

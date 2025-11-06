@@ -32,7 +32,7 @@ class CategoriaController
         $categoria = Categoria::find($id);
 
         if (!$categoria) {
-            header('Location: /aula_php/aula7/categorias?erro=' . urlencode("Categoria não encontrada!"));
+            header('Location: /categorias?erro=' . urlencode("Categoria não encontrada!"));
             exit;
         }
 
@@ -68,14 +68,14 @@ class CategoriaController
         if (isset($_POST['nome']) && !empty(trim($_POST['nome']))) {
             try {
                 Categoria::criar($_POST['nome']);
-                header('Location: /aula_php/aula7/categorias?mensagem=' . urlencode("Categoria criada com sucesso!"));
+                header('Location: /categorias?mensagem=' . urlencode("Categoria criada com sucesso!"));
                 exit;
             } catch (\Exception $e) {
-                header('Location: /aula_php/aula7/categorias/criar?erro=' . urlencode($e->getMessage()));
+                header('Location: /categorias/criar?erro=' . urlencode($e->getMessage()));
                 exit;
             }
         } else {
-            header('Location: /aula_php/aula7/categorias/criar?erro=' . urlencode("Nome da categoria é obrigatório!"));
+            header('Location: /categorias/criar?erro=' . urlencode("Nome da categoria é obrigatório!"));
             exit;
         }
     }
@@ -83,10 +83,10 @@ class CategoriaController
     {
         try {
             Categoria::deletar($id);
-            header('Location: /aula_php/aula7/categorias?mensagem=' . urlencode("Categoria removida com sucesso!"));
+            header('Location: /categorias?mensagem=' . urlencode("Categoria removida com sucesso!"));
             exit;
         } catch (\Exception $e) {
-            header('Location: /aula_php/aula7/categorias?erro=' . urlencode($e->getMessage()));
+            header('Location: /categorias?erro=' . urlencode($e->getMessage()));
             exit;
         }
     }
@@ -96,7 +96,7 @@ class CategoriaController
         $categoria = Categoria::find($id);
 
         if (!$categoria) {
-            header('Location: /aula_php/aula7/categorias?erro=' . urlencode("Categoria não encontrada!"));
+            header('Location: /categorias?erro=' . urlencode("Categoria não encontrada!"));
             exit;
         }
 
@@ -111,14 +111,14 @@ class CategoriaController
         if (isset($_POST['nome']) && !empty(trim($_POST['nome']))) {
             try {
                 Categoria::atualizar($id, $_POST['nome']);
-                header('Location: /aula_php/aula7/categorias?mensagem=' . urlencode("Categoria atualizada com sucesso!"));
+                header('Location: /categorias?mensagem=' . urlencode("Categoria atualizada com sucesso!"));
                 exit;
             } catch (\Exception $e) {
-                header('Location: /aula_php/aula7/categorias/editar?id=' . $id . '&erro=' . urlencode($e->getMessage()));
+                header('Location: /categorias/editar?id=' . $id . '&erro=' . urlencode($e->getMessage()));
                 exit;
             }
         } else {
-            header('Location: /aula_php/aula7/categorias/editar?id=' . $id . '&erro=' . urlencode("Nome da categoria é obrigatório!"));
+            header('Location: /categorias/editar?id=' . $id . '&erro=' . urlencode("Nome da categoria é obrigatório!"));
             exit;
         }
     }

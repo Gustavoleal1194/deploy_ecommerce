@@ -21,7 +21,7 @@
         <p><strong>Preço:</strong> R$ <?= number_format($produto['preco'], 2, ',', '.') ?></p>
         <p><strong>Categoria:</strong>
             <?php if ($categoria): ?>
-                <a href="/aula_php/aula7/categorias/ver?id=<?= $categoria['id'] ?>">
+                <a href="/categorias/ver?id=<?= $categoria['id'] ?>">
                     <?= htmlspecialchars($categoria['nome']) ?>
                 </a>
             <?php else: ?>
@@ -31,8 +31,8 @@
 
         <hr>
 
-        <a href="/aula_php/aula7/produtos/editar?id=<?= $produto['id'] ?>">Editar Produto</a>
-        <a href="/aula_php/aula7/produtos">Voltar para a lista</a>
+        <a href="/produtos/editar?id=<?= $produto['id'] ?>">Editar Produto</a>
+        <a href="/produtos">Voltar para a lista</a>
 
     <?php endif; ?>
 

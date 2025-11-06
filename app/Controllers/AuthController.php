@@ -13,7 +13,7 @@ class AuthController
     {
         // Se já estiver logado, redireciona
         if ($this->estaAutenticado()) {
-            header('Location: /aula_php/aula7/produtos');
+            header('Location: /produtos');
             exit;
         }
 
@@ -27,7 +27,7 @@ class AuthController
     public function autenticar(): void
     {
         if (!isset($_POST['email']) || !isset($_POST['senha'])) {
-            header('Location: /aula_php/aula7/login?erro=' . urlencode("Email e senha são obrigatórios!"));
+            header('Location: /login?erro=' . urlencode("Email e senha são obrigatórios!"));
             exit;
         }
 
@@ -45,14 +45,14 @@ class AuthController
                 $_SESSION['usuario_email'] = $usuario['email'];
                 $_SESSION['usuario_tipo'] = $usuario['tipo'];
 
-                header('Location: /aula_php/aula7/produtos?mensagem=' . urlencode("Login realizado com sucesso!"));
+                header('Location: /produtos?mensagem=' . urlencode("Login realizado com sucesso!"));
                 exit;
             } else {
-                header('Location: /aula_php/aula7/login?erro=' . urlencode("Email ou senha incorretos!"));
+                header('Location: /login?erro=' . urlencode("Email ou senha incorretos!"));
                 exit;
             }
         } catch (\Exception $e) {
-            header('Location: /aula_php/aula7/login?erro=' . urlencode($e->getMessage()));
+            header('Location: /login?erro=' . urlencode($e->getMessage()));
             exit;
         }
     }
@@ -66,7 +66,7 @@ class AuthController
         session_unset();
         session_destroy();
 
-        header('Location: /aula_php/aula7/login?mensagem=' . urlencode("Logout realizado com sucesso!"));
+        header('Location: /login?mensagem=' . urlencode("Logout realizado com sucesso!"));
         exit;
     }
 
@@ -117,7 +117,7 @@ class AuthController
     public static function protegerRota(): void
     {
         if (!self::estaAutenticado()) {
-            header('Location: /aula_php/aula7/login?erro=' . urlencode("Faça login para acessar esta página!"));
+            header('Location: /login?erro=' . urlencode("Faça login para acessar esta página!"));
             exit;
         }
     }

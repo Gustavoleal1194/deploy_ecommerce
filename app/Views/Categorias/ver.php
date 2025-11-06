@@ -7,8 +7,8 @@
         <h2>Categoria #<?= $categoria['id'] ?></h2>
         <p>Nome: <?= htmlspecialchars($categoria['nome']) ?></p>
 
-        <a href="/aula_php/aula7/categorias/editar?id=<?= $categoria['id'] ?>">Editar</a>
-        <a href="/aula_php/aula7/categorias">Voltar</a>
+        <a href="/categorias/editar?id=<?= $categoria['id'] ?>">Editar</a>
+        <a href="/categorias">Voltar</a>
 
         <hr>
 
@@ -24,7 +24,7 @@
             <ul>
                 <?php foreach ($produtos as $produto): ?>
                     <li>
-                        <a href="/aula_php/aula7/produtos/ver?id=<?= $produto['id'] ?>">
+                        <a href="/produtos/ver?id=<?= $produto['id'] ?>">
                             <?= htmlspecialchars($produto['nome']) ?>
                         </a>
                         - R$ <?= number_format($produto['preco'], 2, ',', '.') ?>

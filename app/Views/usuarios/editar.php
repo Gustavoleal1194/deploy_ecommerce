@@ -17,9 +17,9 @@
 
 <?php if (!$usuario): ?>
     <p>Usuário não encontrado.</p>
-    <a href="/aula_php/aula7/usuarios">Voltar</a>
+    <a href="/usuarios">Voltar</a>
 <?php else: ?>
-    <form method="POST" action="/aula_php/aula7/api/usuarios/editar">
+    <form method="POST" action="/api/usuarios/editar">
         <input type="hidden" name="id" value="<?= $usuario['id'] ?>">
 
         <div style="margin-bottom: 15px;">
@@ -47,6 +47,6 @@
         </div>
 
         <button type="submit" style="padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer;">Atualizar Usuário</button>
-        <a href="/aula_php/aula7/usuarios" style="margin-left: 10px;">Cancelar</a>
+        <a href="/usuarios" style="margin-left: 10px;">Cancelar</a>
     </form>
 <?php endif; ?>

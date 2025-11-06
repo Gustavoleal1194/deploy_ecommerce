@@ -114,7 +114,7 @@
             </div>
         <?php endif; ?>
         
-        <form method="POST" action="/aula_php/aula7/api/login">
+        <form method="POST" action="/api/login">
             <div class="form-group">
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" required autofocus>

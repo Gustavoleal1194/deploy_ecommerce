@@ -15,7 +15,7 @@
     </div>
 <?php endif; ?>
 
-<form method="POST" action="/aula_php/aula7/api/categorias">
+<form method="POST" action="/api/categorias">
     <div>
         <label for="nome">Nome:</label>
         <input type="text" id="nome" name="nome" required>
@@ -23,6 +23,6 @@
 
     <div>
         <button type="submit">Salvar</button>
-        <a href="/aula_php/aula7/categorias">Cancelar</a>
+        <a href="/categorias">Cancelar</a>
     </div>
 </form>

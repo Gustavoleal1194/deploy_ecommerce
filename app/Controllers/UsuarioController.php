@@ -33,7 +33,7 @@ class UsuarioController
         $usuario = Usuario::find($id);
         
         if (!$usuario) {
-            header('Location: /aula_php/aula7/usuarios?erro=' . urlencode("Usuário não encontrado!"));
+            header('Location: /usuarios?erro=' . urlencode("Usuário não encontrado!"));
             exit;
         }
         
@@ -52,7 +52,7 @@ class UsuarioController
         $usuario = Usuario::find($id);
         
         if (!$usuario) {
-            header('Location: /aula_php/aula7/usuarios?erro=' . urlencode("Usuário não encontrado!"));
+            header('Location: /usuarios?erro=' . urlencode("Usuário não encontrado!"));
             exit;
         }
         
@@ -99,14 +99,14 @@ class UsuarioController
                     $_POST['senha'],
                     $_POST['tipo']
                 );
-                header('Location: /aula_php/aula7/usuarios?mensagem=' . urlencode("Usuário criado com sucesso!"));
+                header('Location: /usuarios?mensagem=' . urlencode("Usuário criado com sucesso!"));
                 exit;
             } catch (\Exception $e) {
-                header('Location: /aula_php/aula7/usuarios/criar?erro=' . urlencode($e->getMessage()));
+                header('Location: /usuarios/criar?erro=' . urlencode($e->getMessage()));
                 exit;
             }
         } else {
-            header('Location: /aula_php/aula7/usuarios/criar?erro=' . urlencode("Dados incompletos!"));
+            header('Location: /usuarios/criar?erro=' . urlencode("Dados incompletos!"));
             exit;
         }
     }
@@ -117,14 +117,14 @@ class UsuarioController
             try {
                 $senha = !empty($_POST['senha']) ? $_POST['senha'] : null;
                 Usuario::atualizar($id, $_POST['nome'], $_POST['email'], $senha);
-                header('Location: /aula_php/aula7/usuarios?mensagem=' . urlencode("Usuário atualizado com sucesso!"));
+                header('Location: /usuarios?mensagem=' . urlencode("Usuário atualizado com sucesso!"));
                 exit;
             } catch (\Exception $e) {
-                header('Location: /aula_php/aula7/usuarios/editar?id=' . $id . '&erro=' . urlencode($e->getMessage()));
+                header('Location: /usuarios/editar?id=' . $id . '&erro=' . urlencode($e->getMessage()));
                 exit;
             }
         } else {
-            header('Location: /aula_php/aula7/usuarios/editar?id=' . $id . '&erro=' . urlencode("Dados incompletos!"));
+            header('Location: /usuarios/editar?id=' . $id . '&erro=' . urlencode("Dados incompletos!"));
             exit;
         }
     }
@@ -135,15 +135,15 @@ class UsuarioController
             // Não permitir deletar o próprio usuário logado
             $usuarioLogado = \App\Controllers\AuthController::usuarioLogado();
             if ($usuarioLogado && $usuarioLogado['id'] == $id) {
-                header('Location: /aula_php/aula7/usuarios?erro=' . urlencode("Você não pode deletar seu próprio usuário!"));
+                header('Location: /usuarios?erro=' . urlencode("Você não pode deletar seu próprio usuário!"));
                 exit;
             }
             
             Usuario::delete($id);
-            header('Location: /aula_php/aula7/usuarios?mensagem=' . urlencode("Usuário removido com sucesso!"));
+            header('Location: /usuarios?mensagem=' . urlencode("Usuário removido com sucesso!"));
             exit;
         } catch (\Exception $e) {
-            header('Location: /aula_php/aula7/usuarios?erro=' . urlencode($e->getMessage()));
+            header('Location: /usuarios?erro=' . urlencode($e->getMessage()));
             exit;
         }
     }

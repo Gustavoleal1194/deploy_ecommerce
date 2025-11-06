@@ -21,7 +21,7 @@
     <?php foreach ($usuarios as $usuario): ?>
         <li>
             <h3>
-                <a href="/aula_php/aula7/usuarios/ver?id=<?= $usuario['id'] ?>">
+                <a href="/usuarios/ver?id=<?= $usuario['id'] ?>">
                     <?= htmlspecialchars($usuario['nome']) ?>
                 </a>
             </h3>
@@ -33,8 +33,8 @@
                 </span>
             </p>
 
-            <a href="/aula_php/aula7/usuarios/editar?id=<?= $usuario['id'] ?>">Editar</a>
-            <a href="/aula_php/aula7/usuarios" style="margin-left: 10px;">Voltar</a>
+            <a href="/usuarios/editar?id=<?= $usuario['id'] ?>">Editar</a>
+            <a href="/usuarios" style="margin-left: 10px;">Voltar</a>
 
             <hr>
         </li>

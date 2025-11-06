@@ -2,15 +2,15 @@
 
 <h1>Usuários</h1>
 
-<a href="/aula_php/aula7/usuarios/criar">Adicionar Novo Usuário</a>
+<a href="/usuarios/criar">Adicionar Novo Usuário</a>
 
 <hr>
 
 <!-- Campo de busca -->
-<form method="GET" action="/aula_php/aula7/usuarios/buscar">
+<form method="GET" action="/usuarios/buscar">
     <input type="text" name="busca" placeholder="Buscar usuários..." value="<?= htmlspecialchars($_GET['busca'] ?? '') ?>">
     <button type="submit">Buscar</button>
-    <a href="/aula_php/aula7/usuarios">Limpar</a>
+    <a href="/usuarios">Limpar</a>
 </form>
 
 <hr>
@@ -32,7 +32,7 @@
     <?php foreach ($usuarios as $usuario): ?>
         <li>
             <h3>
-                <a href="/aula_php/aula7/usuarios/ver?id=<?= $usuario['id'] ?>">
+                <a href="/usuarios/ver?id=<?= $usuario['id'] ?>">
                     <?= htmlspecialchars($usuario['nome']) ?>
                 </a>
             </h3>
@@ -45,14 +45,14 @@
             </p>
             <p><strong>Criado em:</strong> <?= date('d/m/Y H:i', strtotime($usuario['created_at'])) ?></p>
 
-            <a href="/aula_php/aula7/usuarios/editar?id=<?= $usuario['id'] ?>">Editar</a>
+            <a href="/usuarios/editar?id=<?= $usuario['id'] ?>">Editar</a>
 
             <?php
             $usuarioLogado = \App\Controllers\AuthController::usuarioLogado();
             // Não permitir deletar o próprio usuário
             if ($usuarioLogado && $usuarioLogado['id'] != $usuario['id']):
             ?>
-                <form action="/aula_php/aula7/api/usuarios/deletar" method="POST" style="display: inline;">
+                <form action="/api/usuarios/deletar" method="POST" style="display: inline;">
                     <input type="hidden" name="id" value="<?= $usuario['id'] ?>" />
                     <button type="submit" onclick="return confirm('Tem certeza que deseja excluir este usuário?')">Excluir</button>
                 </form>

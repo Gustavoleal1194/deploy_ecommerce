@@ -15,7 +15,7 @@
     </div>
 <?php endif; ?>
 
-<form method="POST" action="/aula_php/aula7/api/produtos/editar">
+<form method="POST" action="/api/produtos/editar">
     <input type="hidden" name="id" value="<?= $produto['id'] ?>">
 
     <div>
@@ -42,6 +42,6 @@
 
     <div>
         <button type="submit">Atualizar</button>
-        <a href="/aula_php/aula7/produtos">Cancelar</a>
+        <a href="/produtos">Cancelar</a>
     </div>
 </form>

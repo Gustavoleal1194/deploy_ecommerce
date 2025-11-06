@@ -12,16 +12,16 @@
 
     <h1>Produtos</h1>
 
-    <a href="/aula_php/aula7/produtos/criar">Adicionar Novo Produto</a>
+    <a href="/produtos/criar">Adicionar Novo Produto</a>
 
     <hr>
 
     <!-- Campo de busca -->
-    <form method="GET" action="/aula_php/aula7/produtos/buscar">
+    <form method="GET" action="/produtos/buscar">
         <input type="text" name="busca" placeholder="Buscar produtos..."
             value="<?= htmlspecialchars($_GET['busca'] ?? '') ?>">
         <button type="submit">Buscar</button>
-        <a href="/aula_php/aula7/produtos">Limpar</a>
+        <a href="/produtos">Limpar</a>
     </form>
 
     <hr>
@@ -42,14 +42,14 @@
     <ul>
         <?php foreach ($produtos as $item): ?>
             <li>
-                <a href="/aula_php/aula7/produtos/ver?id=<?= $item['id'] ?>">
+                <a href="/produtos/ver?id=<?= $item['id'] ?>">
                     <?= htmlspecialchars($item['nome']) ?>
                 </a>
                 - R$ <?= number_format($item['preco'], 2, ',', '.') ?>
 
-                <a href="/aula_php/aula7/produtos/editar?id=<?= $item['id'] ?>">Editar</a>
+                <a href="/produtos/editar?id=<?= $item['id'] ?>">Editar</a>
 
-                <form action="/aula_php/aula7/api/produtos/deletar" method="POST" style="display: inline;">
+                <form action="/api/produtos/deletar" method="POST" style="display: inline;">
                     <input type="hidden" name="id" value="<?= $item['id'] ?>" />
                     <button type="submit">Excluir</button>
                 </form>

@@ -4,7 +4,7 @@
 
 <p>Encontradas <?= count($categorias) ?> categoria(s):</p>
 
-<a href="/aula_php/aula7/categorias">← Voltar para Categorias</a>
+<a href="/categorias">← Voltar para Categorias</a>
 
 <hr>
 
@@ -25,13 +25,13 @@
     <?php foreach ($categorias as $item): ?>
         <li>
             <h3>
-                <a href="/aula_php/aula7/categorias/ver?id=<?= $item['id'] ?>">
+                <a href="/categorias/ver?id=<?= $item['id'] ?>">
                     <?= htmlspecialchars($item['nome']) ?>
                 </a>
             </h3>
 
-            <a href="/aula_php/aula7/categorias/editar?id=<?= $item['id'] ?>">Editar</a>
-            <a href="/aula_php/aula7/categorias/ver?id=<?= $item['id'] ?>">Ver Detalhes</a>
+            <a href="/categorias/editar?id=<?= $item['id'] ?>">Editar</a>
+            <a href="/categorias/ver?id=<?= $item['id'] ?>">Ver Detalhes</a>
 
             <!-- Produtos desta categoria -->
             <?php
@@ -44,7 +44,7 @@
                 <ul style="margin-left: 20px;">
                     <?php foreach ($produtosCategoria as $produto): ?>
                         <li>
-                            <a href="/aula_php/aula7/produtos/ver?id=<?= $produto['id'] ?>">
+                            <a href="/produtos/ver?id=<?= $produto['id'] ?>">
                                 <?= htmlspecialchars($produto['nome']) ?>
                             </a>
                             - R$ <?= number_format($produto['preco'], 2, ',', '.') ?>

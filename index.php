@@ -37,7 +37,7 @@ $uri = $_SERVER["REQUEST_URI"] ?? "/";
 // tratamento QUERY STRING (ex: ?parametro=valor)
 $uri = strtok($uri, "?");
 
-// remove o prefixo /aula_php/aula7 da frente da uri
+// remove o prefixo  da frente da uri
 if (str_starts_with($uri, $basedir)) {
     // remover a string da uri
     $uri = substr($uri, strlen($basedir));
@@ -110,7 +110,7 @@ if ($metodo == 'GET') {
     // rotas de Usuários (apenas para admin)
     if ($uri === '/usuarios') {
         if (!AuthController::ehAdmin()) {
-            header('Location: /aula_php/aula7/produtos?erro=' . urlencode("Acesso negado! Apenas administradores."));
+            header('Location: /produtos?erro=' . urlencode("Acesso negado! Apenas administradores."));
             exit;
         }
         echo (new UsuarioController())->index();
@@ -119,7 +119,7 @@ if ($metodo == 'GET') {
     
     if ($uri === '/usuarios/criar') {
         if (!AuthController::ehAdmin()) {
-            header('Location: /aula_php/aula7/produtos?erro=' . urlencode("Acesso negado! Apenas administradores."));
+            header('Location: /produtos?erro=' . urlencode("Acesso negado! Apenas administradores."));
             exit;
         }
         echo (new UsuarioController())->criar();
@@ -128,7 +128,7 @@ if ($metodo == 'GET') {
     
     if ($uri === '/usuarios/ver') {
         if (!AuthController::ehAdmin()) {
-            header('Location: /aula_php/aula7/produtos?erro=' . urlencode("Acesso negado! Apenas administradores."));
+            header('Location: /produtos?erro=' . urlencode("Acesso negado! Apenas administradores."));
             exit;
         }
         $id = (int) ($_GET['id'] ?? 0);
@@ -138,7 +138,7 @@ if ($metodo == 'GET') {
     
     if ($uri === '/usuarios/editar') {
         if (!AuthController::ehAdmin()) {
-            header('Location: /aula_php/aula7/produtos?erro=' . urlencode("Acesso negado! Apenas administradores."));
+            header('Location: /produtos?erro=' . urlencode("Acesso negado! Apenas administradores."));
             exit;
         }
         $id = (int) ($_GET['id'] ?? 0);
@@ -172,7 +172,7 @@ if ($uri === '/api/categorias/deletar' && $metodo == 'POST') {
     $id = (int) ($_POST['id']);
     echo (new CategoriaController())->delete($id);
     // redirecionar a tela
-    header('Location: /aula_php/aula7/produtos');
+    header('Location: /produtos');
     exit;
 }
 if ($uri === '/api/produtos' && $metodo == 'GET') {
@@ -197,7 +197,7 @@ if ($uri === '/api/produtos/deletar' && $metodo == 'POST') {
     $id = (int) ($_POST['id']);
     echo (new ProdutoController())->delete($id);
     // redirecionar a tela
-    header('Location: /aula_php/aula7/produtos');
+    header('Location: /produtos');
     exit;
 }
 
@@ -227,7 +227,7 @@ if ($uri === '/api/usuarios/ver' && $metodo == 'GET') {
 
 if ($uri === '/api/usuarios' && $metodo == 'POST') {
     if (!AuthController::ehAdmin()) {
-        header('Location: /aula_php/aula7/produtos?erro=' . urlencode("Acesso negado! Apenas administradores."));
+        header('Location: /produtos?erro=' . urlencode("Acesso negado! Apenas administradores."));
         exit;
     }
     echo (new UsuarioController())->create();
@@ -236,7 +236,7 @@ if ($uri === '/api/usuarios' && $metodo == 'POST') {
 
 if ($uri === '/api/usuarios/editar' && $metodo == 'POST') {
     if (!AuthController::ehAdmin()) {
-        header('Location: /aula_php/aula7/produtos?erro=' . urlencode("Acesso negado! Apenas administradores."));
+        header('Location: /produtos?erro=' . urlencode("Acesso negado! Apenas administradores."));
         exit;
     }
     $id = (int) ($_POST['id']);
@@ -246,7 +246,7 @@ if ($uri === '/api/usuarios/editar' && $metodo == 'POST') {
 
 if ($uri === '/api/usuarios/deletar' && $metodo == 'POST') {
     if (!AuthController::ehAdmin()) {
-        header('Location: /aula_php/aula7/produtos?erro=' . urlencode("Acesso negado! Apenas administradores."));
+        header('Location: /produtos?erro=' . urlencode("Acesso negado! Apenas administradores."));
         exit;
     }
     $id = (int) ($_POST['id']);
@@ -310,7 +310,7 @@ if ($uri === '/produtos/buscar' && $metodo == 'GET') {
     if (!empty($produtos)) {
         if (count($produtos) === 1) {
             // Se encontrou apenas um produto, redireciona direto para ele
-            header('Location: /aula_php/aula7/produtos/ver?id=' . $produtos[0]['id']);
+            header('Location: /produtos/ver?id=' . $produtos[0]['id']);
             exit;
         } else {
             // Se encontrou múltiplos, mostra página de resultados
@@ -318,7 +318,7 @@ if ($uri === '/produtos/buscar' && $metodo == 'GET') {
             exit;
         }
     } else {
-        header('Location: /aula_php/aula7/produtos?erro=' . urlencode("Nenhum produto encontrado com o termo: " . htmlspecialchars($busca)));
+        header('Location: /produtos?erro=' . urlencode("Nenhum produto encontrado com o termo: " . htmlspecialchars($busca)));
         exit;
     }
 }
@@ -330,7 +330,7 @@ if ($uri === '/categorias/buscar' && $metodo == 'GET') {
     if (!empty($categorias)) {
         if (count($categorias) === 1) {
             // Se encontrou apenas uma categoria, redireciona direto para ela
-            header('Location: /aula_php/aula7/categorias/ver?id=' . $categorias[0]['id']);
+            header('Location: /categorias/ver?id=' . $categorias[0]['id']);
             exit;
         } else {
             // Se encontrou múltiplas, mostra página de resultados
@@ -338,14 +338,14 @@ if ($uri === '/categorias/buscar' && $metodo == 'GET') {
             exit;
         }
     } else {
-        header('Location: /aula_php/aula7/categorias?erro=' . urlencode("Nenhuma categoria encontrada com o termo: " . htmlspecialchars($busca)));
+        header('Location: /categorias?erro=' . urlencode("Nenhuma categoria encontrada com o termo: " . htmlspecialchars($busca)));
         exit;
     }
 }
 
 if ($uri === '/usuarios/buscar' && $metodo == 'GET') {
     if (!AuthController::ehAdmin()) {
-        header('Location: /aula_php/aula7/produtos?erro=' . urlencode("Acesso negado! Apenas administradores."));
+        header('Location: /produtos?erro=' . urlencode("Acesso negado! Apenas administradores."));
         exit;
     }
     $busca = $_GET['busca'] ?? '';
@@ -357,7 +357,7 @@ if ($uri === '/usuarios/buscar' && $metodo == 'GET') {
 
     if (!empty($usuarios)) {
         if (count($usuarios) === 1) {
-            header('Location: /aula_php/aula7/usuarios/ver?id=' . $usuarios[0]['id']);
+            header('Location: /usuarios/ver?id=' . $usuarios[0]['id']);
             exit;
         } else {
             // Mostrar resultados de busca
@@ -365,7 +365,7 @@ if ($uri === '/usuarios/buscar' && $metodo == 'GET') {
             exit;
         }
     } else {
-        header('Location: /aula_php/aula7/usuarios?erro=' . urlencode("Nenhum usuário encontrado com o termo: " . htmlspecialchars($busca)));
+        header('Location: /usuarios?erro=' . urlencode("Nenhum usuário encontrado com o termo: " . htmlspecialchars($busca)));
         exit;
     }
 }

@@ -3,7 +3,7 @@
 <div>
     <?php if (!$usuario): ?>
         <p>Usuário não encontrado.</p>
-        <a href="/aula_php/aula7/usuarios">Voltar</a>
+        <a href="/usuarios">Voltar</a>
     <?php else: ?>
         <h2>Usuário #<?= $usuario['id'] ?></h2>
         
@@ -19,7 +19,7 @@
 
         <hr>
 
-        <a href="/aula_php/aula7/usuarios/editar?id=<?= $usuario['id'] ?>">Editar</a>
-        <a href="/aula_php/aula7/usuarios" style="margin-left: 10px;">Voltar</a>
+        <a href="/usuarios/editar?id=<?= $usuario['id'] ?>">Editar</a>
+        <a href="/usuarios" style="margin-left: 10px;">Voltar</a>
     <?php endif; ?>
 </div>

@@ -15,7 +15,7 @@
     </div>
 <?php endif; ?>
 
-<form method="POST" action="/aula_php/aula7/api/usuarios">
+<form method="POST" action="/api/usuarios">
     <div style="margin-bottom: 15px;">
         <label for="nome">Nome:</label><br>
         <input type="text" id="nome" name="nome" required style="width: 300px; padding: 8px;">
@@ -41,5 +41,5 @@
     </div>
 
     <button type="submit" style="padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer;">Criar Usuário</button>
-    <a href="/aula_php/aula7/usuarios" style="margin-left: 10px;">Cancelar</a>
+    <a href="/usuarios" style="margin-left: 10px;">Cancelar</a>
 </form>

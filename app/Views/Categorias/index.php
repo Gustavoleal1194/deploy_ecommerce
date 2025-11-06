@@ -2,16 +2,16 @@
 
 <h1>Categorias</h1>
 
-<a href="/aula_php/aula7/categorias/criar">Adicionar Nova Categoria</a>
+<a href="/categorias/criar">Adicionar Nova Categoria</a>
 
 <hr>
 
 <!-- Campo de busca -->
-<form method="GET" action="/aula_php/aula7/categorias/buscar">
+<form method="GET" action="/categorias/buscar">
     <input type="text" name="busca" placeholder="Buscar categorias..."
         value="<?= htmlspecialchars($_GET['busca'] ?? '') ?>">
     <button type="submit">Buscar</button>
-    <a href="/aula_php/aula7/categorias">Limpar</a>
+    <a href="/categorias">Limpar</a>
 </form>
 
 <hr>
@@ -33,14 +33,14 @@
     <?php foreach ($categorias as $item): ?>
         <li>
             <h3>
-                <a href="/aula_php/aula7/categorias/ver?id=<?= $item['id'] ?>">
+                <a href="/categorias/ver?id=<?= $item['id'] ?>">
                     <?= htmlspecialchars($item['nome']) ?>
                 </a>
             </h3>
 
-            <a href="/aula_php/aula7/categorias/editar?id=<?= $item['id'] ?>">Editar</a>
+            <a href="/categorias/editar?id=<?= $item['id'] ?>">Editar</a>
 
-            <form action="/aula_php/aula7/api/categorias/deletar" method="POST" style="display: inline;">
+            <form action="/api/categorias/deletar" method="POST" style="display: inline;">
                 <input type="hidden" name="id" value="<?= $item['id'] ?>" />
                 <button type="submit">Excluir</button>
             </form>
@@ -56,7 +56,7 @@
                 <ul style="margin-left: 20px;">
                     <?php foreach ($produtosCategoria as $produto): ?>
                         <li>
-                            <a href="/aula_php/aula7/produtos/ver?id=<?= $produto['id'] ?>">
+                            <a href="/produtos/ver?id=<?= $produto['id'] ?>">
                                 <?= htmlspecialchars($produto['nome']) ?>
                             </a>
                             - R$ <?= number_format($produto['preco'], 2, ',', '.') ?>

@@ -15,7 +15,7 @@
     </div>
 <?php endif; ?>
 
-<form method="POST" action="/aula_php/aula7/api/categorias/editar">
+<form method="POST" action="/api/categorias/editar">
     <input type="hidden" name="id" value="<?= $categoria['id'] ?>">
 
     <div>
@@ -25,6 +25,6 @@
 
     <div>
         <button type="submit">Atualizar</button>
-        <a href="/aula_php/aula7/categorias">Cancelar</a>
+        <a href="/categorias">Cancelar</a>
     </div>
 </form>
